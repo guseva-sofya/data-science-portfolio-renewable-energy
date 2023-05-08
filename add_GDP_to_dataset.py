@@ -6,7 +6,7 @@ data = pd.read_csv("data\Electricity_generation_sources_GDP.csv", index_col=0)
 data_GDP = pd.read_csv("Real_GDP_per_capita.csv")
 
 # Perform left join on country name column
-merged_df = pd.merge(
+merged_data = pd.merge(
     data,
     data_GDP[["name", "value", "region"]],
     left_index=True,
@@ -15,15 +15,15 @@ merged_df = pd.merge(
 )
 
 # Set the index to country names
-merged_df.set_index(data.index, inplace=True)
-merged_df.drop("name", axis=1, inplace=True)
+merged_data.set_index(data.index, inplace=True)
+merged_data.drop("name", axis=1, inplace=True)
 
 # remove $ sign from GDP column
-merged_df["value"] = pd.to_numeric(
-    merged_df["value"].str.replace(",", "").str.replace("$", "")
+merged_data["value"] = pd.to_numeric(
+    merged_data["value"].str.replace(",", "").str.replace("$", "")
 )
 
-merged_df.rename(columns={"value": "GDP per capita ($):"}, inplace=True)
-print(merged_df)
+merged_data.rename(columns={"value": "GDP per capita ($):"}, inplace=True)
+print(merged_data)
 
-merged_df.to_csv("Electricity_generation_sources_GDP.csv")
+merged_data.to_csv("Electricity_generation_sources_GDP.csv")
