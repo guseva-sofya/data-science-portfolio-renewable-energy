@@ -5,10 +5,12 @@ import matplotlib.pyplot as plt
 import textwrap
 import get_color_palette
 
-data = pd.read_csv("data\Electricity_generation_sources_GDP.csv", index_col=0)
+data = pd.read_csv(
+    "data\Electricity_generation_sources_GDP_area_lat_long.csv", index_col=0
+)
 
 # sum of the renewable sources
-data["sum renewable:"] = data.iloc[:, 2:8].sum(axis=1)
+data["sum renewable:"] = data.iloc[:, 7:].sum(axis=1)
 print(data.head())
 
 # % of the sum of renewable energy sources
@@ -23,7 +25,7 @@ total_countries = data.groupby("region").count()["sum renewable:"]
 # calculate the percentage of countries where the renewable energy
 # value is above the threshold for each region
 percent_above_threshold = above_threshold / total_countries * 100
-results_df = pd.DataFrame(
+resulted_data = pd.DataFrame(
     {
         "above_threshold": above_threshold,
         "total_countries": total_countries,
@@ -31,7 +33,7 @@ results_df = pd.DataFrame(
     }
 )
 
-print(results_df)
+print(resulted_data)
 
 # plot a horizontal bar chart
 fig, ax = plt.subplots(figsize=(9, 6))
@@ -66,12 +68,12 @@ ax.set_yticklabels(
 
 ax.invert_yaxis()
 
-# plt.savefig("figures\energy_threshold.png", dpi=300)
+# plt.savefig("figures\renewable_energy_sources_by_region.png", dpi=300)
 # plt.show()
 
 # find unique regions
-unique_regions = data["region"].unique()
-print(unique_regions)
+# unique_regions = data["region"].unique()
+# print(unique_regions)
 
 selected_countries = data[
     (data["sum renewable:"] > 50) & (data["GDP per capita ($):"] < 20000)
@@ -98,27 +100,52 @@ plt.scatter(
 plt.xlabel("Sum of the renewable energy sources (%)")
 plt.ylabel("GDP per capita ($)")
 plt.title("Sum of the renewable energy sources (%) vs. GDP per capita ($)")
+# plt.show()
+
+plt.savefig("figures\sum_renewable_energy_sources_vs_GDP.png", dpi=300)
 plt.show()
 
 selected_countries = data[
     (data["sum renewable:"] > 50) & (data["GDP per capita ($):"] < 20000)
 ]
-print(selected_countries.head())
-selected_countries_regions = selected_countries.groupby("region").count()[
-    "sum renewable:"
-]
-print(selected_countries_regions)
+# print(selected_countries.head())
+# selected_countries_regions = selected_countries.groupby("region").count()[
+#     "sum renewable:"
+# ]
+# print(selected_countries_regions)
 
-selected_countries.to_csv("selected_countries_low_GDP.csv")
+# selected_countries.to_csv("selected_countries_low_GDP.csv")
 
 
 selected_countries = data[
     (data["sum renewable:"] < 20) & (data["GDP per capita ($):"] > 40000)
 ]
-print(selected_countries.head())
-selected_countries_regions = selected_countries.groupby("region").count()[
-    "sum renewable:"
-]
-print(selected_countries_regions)
+# print(selected_countries.head())
+# selected_countries_regions = selected_countries.groupby("region").count()[
+#     "sum renewable:"
+# ]
+# print(selected_countries_regions)
 
-selected_countries.to_csv("selected_countries_high_GDP.csv")
+# selected_countries.to_csv("selected_countries_high_GDP.csv")
+
+fig, ax = plt.subplots(figsize=(9, 6))
+plt.scatter(x=data["sum renewable:"], y=abs(data["latitude"]))
+
+plt.xlabel("Sum of the renewable energy sources (%)")
+plt.ylabel("Latitude")
+plt.title("Sum of the renewable energy sources (%) vs. Latitude")
+# plt.show()
+
+plt.savefig("figures\sum_renewable_energy_sources_vs_latitude.png", dpi=300)
+plt.show()
+
+fig, ax = plt.subplots(figsize=(9, 6))
+plt.scatter(x=data["sum renewable:"], y=abs(data["area (sq km):"]))
+
+plt.xlabel("Sum of the renewable energy sources (%)")
+plt.ylabel("Country area [sq km]")
+plt.title("Sum of the renewable energy sources (%) vs. Country area")
+# plt.show()
+
+plt.savefig("figures\sum_renewable_energy_sources_vs_area.png", dpi=300)
+plt.show()
