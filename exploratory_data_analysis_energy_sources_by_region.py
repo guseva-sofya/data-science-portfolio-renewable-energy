@@ -3,7 +3,7 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import textwrap
-import get_color_palette
+
 
 data = pd.read_csv(
     "data\Electricity_generation_sources_GDP_area_lat_long.csv", index_col=0
@@ -75,18 +75,6 @@ selected_countries = data[
 # print(selected_countries_regions)
 
 # selected_countries.to_csv("selected_countries_low_GDP.csv")
-
-
-selected_countries = data[
-    (data["sum renewable:"] < 20) & (data["GDP per capita ($):"] > 40000)
-]
-# print(selected_countries.head())
-# selected_countries_regions = selected_countries.groupby("region").count()[
-#     "sum renewable:"
-# ]
-# print(selected_countries_regions)
-
-# selected_countries.to_csv("selected_countries_high_GDP.csv")
 
 fig, ax = plt.subplots(figsize=(9, 6))
 plt.scatter(x=data["sum renewable:"], y=abs(data["latitude"]))
