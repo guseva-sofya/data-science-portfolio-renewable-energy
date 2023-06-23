@@ -1,8 +1,8 @@
+from typing import List
 import plotly.graph_objects as go
-import get_color_palette
 
 
-def map_fig(data):
+def map_fig(data) -> go.Figure:
     # create a choropleth map
     choropleth_fig = go.Figure(
         go.Choropleth(
@@ -11,7 +11,7 @@ def map_fig(data):
             z=data["sum renewable:"],
             colorscale="RdYlGn",
             colorbar=dict(
-                title="Percent,<br> %", len=0.8, x=-0.07, y=0.525, ticksuffix=""
+                title="Percent,<br> %", len=0.25, x=-0.07, y=0.9, ticksuffix=""
             ),
             uirevision=True,
         )
@@ -32,7 +32,7 @@ def map_fig(data):
     return choropleth_fig
 
 
-def renewable_sources_by_region(data):
+def renewable_sources_by_region_fig(data) -> go.Figure:
     # % of the sum of renewable energy sources
     threshold = 50
     above_threshold = (
@@ -61,7 +61,7 @@ def renewable_sources_by_region(data):
 
     max_indices = sorted_percent_above_threshold.index[:2]
 
-    colors = get_color_palette.color_palette()
+    colors = color_palette()
 
     barh_fig = go.Figure(
         go.Bar(
@@ -76,3 +76,64 @@ def renewable_sources_by_region(data):
     )
 
     return barh_fig
+
+
+def renewable_sources_vs_GDP_fig(data) -> go.Figure:
+    scatter_fig_GDP = go.Figure()
+    scatter_fig_GDP.add_trace(
+        go.Scatter(
+            x=data["sum renewable:"],
+            y=data["GDP per capita ($):"],
+            mode="markers",
+            marker=dict(size=8),
+        )
+    )
+
+    return scatter_fig_GDP
+
+
+def renewable_sources_vs_latitude_fig(data) -> go.Figure:
+    scatter_fig_latitude = go.Figure()
+    scatter_fig_latitude.add_trace(
+        go.Scatter(
+            x=data["sum renewable:"],
+            y=data["latitude"],
+            mode="markers",
+            marker=dict(size=8, color="blue"),
+        )
+    )
+
+    return scatter_fig_latitude
+
+
+def renewable_sources_vs_area_fig(data) -> go.Figure:
+    scatter_fig_area = go.Figure()
+    scatter_fig_area.add_trace(
+        go.Scatter(
+            x=data["sum renewable:"],
+            y=data["area (sq km):"],
+            mode="markers",
+            marker=dict(size=8, color="red"),
+        )
+    )
+
+    return scatter_fig_area
+
+
+def color_palette() -> List[str]:
+    colors = [
+        "#DA6085",
+        "#DC7D8B",
+        "#DE9A91",
+        "#E0B798",
+        "#E2D49E",
+        "#D8D29F",
+        "#CED0A0",
+        "#C4CEA1",
+        "#BACCA2",
+        "#D7EDE1",
+    ]
+
+    colors.reverse()
+
+    return colors

@@ -35,51 +35,11 @@ resulted_data = pd.DataFrame(
 
 print(resulted_data)
 
-# plot a horizontal bar chart
-fig, ax = plt.subplots(figsize=(9, 6))
-
-# sort the percent_above_threshold series in descending order
-sorted_percent_above_threshold = percent_above_threshold.sort_values(ascending=False)
-max_indices = sorted_percent_above_threshold.index[:2]
-
-# colors = ['red' if region in max_indices else 'blue'
-# for region in sorted_percent_above_threshold.index]
-colors = get_color_palette.color_palette()
-
-ax.barh(
-    sorted_percent_above_threshold.index, sorted_percent_above_threshold, color=colors
-)
-
-ax.set_xlabel("Percentage of countries with sum of renewable energy sources above 50%")
-ax.set_ylabel("Region")
-ax.set_title(
-    f"Percentage of countries with sum of renewable energy sources above 50% by region"
-)
-
-ax.set_xlim([0, 100])
-
-wrap_width = 13  # set the number of characters per line
-ax.set_yticklabels(
-    [
-        "\n".join(textwrap.wrap(label, wrap_width))
-        for label in sorted_percent_above_threshold.index
-    ]
-)
-
-ax.invert_yaxis()
-
-# plt.savefig("figures\renewable_energy_sources_by_region.png", dpi=300)
-# plt.show()
-
-# find unique regions
-# unique_regions = data["region"].unique()
-# print(unique_regions)
-
 selected_countries = data[
     (data["sum renewable:"] > 50) & (data["GDP per capita ($):"] < 20000)
 ]
 
-# generate scatter plot
+# scatter plot
 fig, ax = plt.subplots(figsize=(9, 6))
 plt.scatter(x=data["sum renewable:"], y=data["GDP per capita ($):"])
 
